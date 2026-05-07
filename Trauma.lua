@@ -9,7 +9,7 @@ local entity = spawner.Create({
 	Lights = {
 		Flicker = {
 			Enabled = true,
-			Duration = 4
+			Duration = 6
 		},
 		Shatter = true,
 		Repair = false
@@ -23,25 +23,18 @@ local entity = spawner.Create({
 		Values = {4.5, 20, 0.3, 1}
 	},
 	Movement = {
-		Speed = 395,
-		Delay = 8,
+		Speed = 200,
+		Delay = 20,
 		SpawnLocation = "Next",
 		Reversed = true
 	},
-	Rebounding = {
-		Enabled = false,
-		Type = "Ambush",
-		Min = 1,
-		Max = 1,
-		Delay = 1
-	},
 	Damage = {
 		Enabled = true,
-		Range = 40,
-		Amount = 125
+		Range = 20,
+		Amount = 1000
 	},
 	Death = {
-		Type = "Guiding", -- "Curious"
+		Type = "Guiding",
 		Hints = {"You died to Trauma", "It appears when the lights are flickering.", "Hide if it spawn", "Alright Now!"},
 		Cause = "Trauma"
 	}
