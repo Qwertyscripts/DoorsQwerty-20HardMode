@@ -4,7 +4,8 @@ local entity = spawner.Create({
 	Entity = {
 		Name = "Trauma",
 		Asset = "rbxassetid://6685956411",
-		HeightOffset = 0
+		HeightOffset = 0,
+	    Sound = { 5375147888, { Volume = 2, Pitch = 0.95, Looped = true } }
 	},
 	Lights = {
 		Flicker = {
@@ -40,52 +41,21 @@ local entity = spawner.Create({
 	}
 })
 
+
 entity:SetCallback("OnSpawned", function()
-    print("Entity has spawned")
-end)
-
-entity:SetCallback("OnStartMoving", function()
-    print("Entity has started moving")
-end)
-
-entity:SetCallback("OnEnterRoom", function(room, firstTime)
-    if firstTime == true then
-        print("Entity has entered room: ".. room.Name.. " for the first time")
-    else
-        print("Entity has entered room: ".. room.Name.. " again")
+    local model = entity.EntityModel
+    if model then
+        local primaryPart = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
+        
+        if primaryPart then
+            local light = Instance.new("PointLight")
+            light.Parent = primaryPart
+            light.Color = Color3.fromRGB(255, 0, 0)
+            light.Brightness = 30
+            light.Range = 40
+            light.Shadows = true
+        end
     end
-end)
-
-entity:SetCallback("OnLookAt", function(lineOfSight)
-	if lineOfSight == true then
-		print("Player is looking at entity")
-	else
-		print("Player view is obstructed by something")
-	end
-end)
-
-entity:SetCallback("OnRebounding", function(startOfRebound)
-    if startOfRebound == true then
-        print("Entity has started rebounding")
-	else
-        print("Entity has finished rebounding")
-	end
-end)
-
-entity:SetCallback("OnDespawning", function()
-    print("Entity is despawning")
-end)
-
-entity:SetCallback("OnDespawned", function()
-    print("Entity has despawned")
-end)
-
-entity:SetCallback("OnDamagePlayer", function(newHealth)
-	if newHealth == 0 then
-		print("Entity has killed the player")
-	else
-		print("Entity has damaged the player")
-	end
 end)
 
 entity:Run()
