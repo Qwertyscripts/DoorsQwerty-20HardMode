@@ -16,12 +16,14 @@ local entity = spawner.Create({
 		Repair = false
 	},
 	Earthquake = {
-		Enabled = false
+		Enabled = true,
+		Distance = 150,
+		Magnitude = 5
 	},
 	CameraShake = {
 		Enabled = true,
 		Range = 75,
-		Values = {4.5, 20, 0.3, 1}
+		Values = {40, 100, 0.3, 1}
 	},
 	Movement = {
 		Speed = 200,
