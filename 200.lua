@@ -5,6 +5,7 @@ local entity = spawner.Create({
 		Name = "200",
 		Asset = "rbxassetid://12650043114",
 		HeightOffset = 0,
+		Sound = { 5257382967, { Volume = 2, Pitch = 0.95, Looped = true } }
 	},
 	Lights = {
 		Flicker = {
