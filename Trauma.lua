@@ -33,7 +33,7 @@ local entity = spawner.Create({
 		Delay = 8,
 		SpawnLocation = "Next",
 		Reversed = true,
-        CanFly = true
+        CanFly = true 
 	},
 	Damage = {
 		Enabled = willKill,
@@ -55,7 +55,7 @@ entity:SetCallback("OnSpawned", function()
             local light = Instance.new("PointLight")
             light.Parent = primaryPart
             light.Color = Color3.fromRGB(255, 0, 0)
-            light.Brightness = 25
+            light.Brightness = 30
             light.Range = 80
             light.Shadows = true
         end
