@@ -42,7 +42,7 @@ entity:SetCallback("OnSpawned", function()
     end
 
     task.delay(25, function()
-        if entity then
+        if entity and entity.EntityModel then
             pcall(function() entity:Destroy() end)
         end
     end)
