@@ -32,17 +32,17 @@ local entity = spawner.Create({
 		Speed = 200,
 		Delay = 8,
 		SpawnLocation = "Next",
-		Reversed = true,
-        CanFly = true 
+		Reversed = true,        
+        CanFly = true           
 	},
 	Damage = {
-		Enabled = willKill,
+		Enabled = willKill,     
 		Range = 25,
 		Amount = 1000
 	},
 	Death = {
 		Type = "Guiding",
-		Hints = {"You died to Trauma", "It was a lethal strike..."},
+		Hints = {"You died to Trauma", "He can pass through closed doors!", "Hide immediately!"},
 		Cause = "Trauma"
 	}
 })
@@ -52,8 +52,7 @@ entity:SetCallback("OnSpawned", function()
     if model then
         local primaryPart = model.PrimaryPart or model:FindFirstChildWhichIsA("BasePart")
         if primaryPart then
-            local light = Instance.new("PointLight")
-            light.Parent = primaryPart
+            local light = Instance.new("PointLight", primaryPart)
             light.Color = Color3.fromRGB(255, 0, 0)
             light.Brightness = 30
             light.Range = 80
