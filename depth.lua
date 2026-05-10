@@ -16,12 +16,12 @@ local entity = spawner.Create({
 		Delay = 2,
 		SpawnLocation = "Behind",
 		Reversed = false,
-        Cycles = { Min = 2, Max = 2, WaitTime = 0.8 },
+        Cycles = { Min = 2, Max = 2, WaitTime = 1 },
 	},
 	Damage = { Enabled = true, Range = 35, Amount = 1000 },
 	Death = {
 		Type = "Guiding",
-		Hints = {"You died to Depth", "Depth is faster than rush and ambush,And he can rebound 2 Times"},
+		Hints = {"You died to Depth", "Depth is faster than rush and ambush","use what you leared from Ambush and rush tho."},
 		Cause = "Depth"
 	}
 })
@@ -62,6 +62,33 @@ entity:SetCallback("OnSpawned", function()
             nearSound:Play()
         end
     end
+end)
+
+entity:SetCallback("OnDeath", function()
+    local player = game.Players.LocalPlayer
+    local gui = Instance.new("ScreenGui", player.PlayerGui)
+    gui.IgnoreGuiInset = true
+    
+    local jumpscareImg = Instance.new("ImageLabel", gui)
+    jumpscareImg.Size = UDim2.new(1.5, 0, 1.5, 0)
+    jumpscareImg.Position = UDim2.new(-0.25, 0, -0.25, 0)
+    jumpscareImg.Image = "rbxassetid://10937456103"
+    jumpscareImg.BackgroundTransparency = 1
+    
+    local scream = Instance.new("Sound", game.Workspace)
+    scream.SoundId = "rbxassetid://5263560566"
+    scream.Volume = 3
+    scream.Pitch = 0.3
+    scream:Play()
+    
+    task.spawn(function()
+        for i = 1, 60 do
+            jumpscareImg.Position = UDim2.new(-0.25 + math.random(-5, 5)/100, 0, -0.25 + math.random(-5, 5)/100, 0)
+            task.wait(0.01)
+        end
+        gui:Destroy()
+        scream:Destroy()
+    end)
 end)
 
 entity:Run()
