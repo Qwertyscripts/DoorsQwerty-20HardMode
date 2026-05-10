@@ -21,7 +21,7 @@ local entity = spawner.Create({
 	Damage = { Enabled = true, Range = 30, Amount = 1000 },
 	Death = {
 		Type = "Guiding",
-		Hints = {"You died to Depth", "He is faster than anyone else..."},
+		Hints = {"You died to Depth", "He is faster than anyone else...", "Be careful, he rebounds!"},
 		Cause = "Depth"
 	}
 })
@@ -42,14 +42,12 @@ entity:SetCallback("OnSpawned", function()
         
         local sound = model:FindFirstChild("Sound", true)
         if sound and sound:IsA("Sound") then
-            local eq = Instance.new("EqualizerSoundEffect")
-            eq.Parent = sound
+            local eq = Instance.new("EqualizerSoundEffect", sound)
             eq.HighGain = 4.6
             eq.LowGain = -21.5
             eq.MidGain = -0.8
             
-            local dist = Instance.new("DistortionSoundEffect")
-            dist.Parent = sound
+            local dist = Instance.new("DistortionSoundEffect", sound)
             dist.Level = 0.99
         end
     end
