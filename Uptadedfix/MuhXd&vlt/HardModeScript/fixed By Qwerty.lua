@@ -25,12 +25,7 @@ spawner.Events.OnEntityDespawned:Connect(function(entityModel, name)
     end
 end)
 
-task.spawn(function()
-    local latestRoom = game:GetService("ReplicatedStorage").GameData.LatestRoom
-    if latestRoom.Value < 3 then
-        repeat task.wait(1) until latestRoom.Value >= 3
-    end
-    
+local function spawnDepth()
     local depth = spawner.createEntity({
         CustomName = "Depth",
         Model = "rbxassetid://11517682292",
@@ -42,19 +37,13 @@ task.spawn(function()
         CustomDialog = {"You died to Depth", "He is faster than Rush!", "Use your Ambush tactics."}
     })
     spawner.runEntity(depth)
-end)
+end
 
-task.spawn(function()
-    local latestRoom = game:GetService("ReplicatedStorage").GameData.LatestRoom
-    if latestRoom.Value < 5 then
-        repeat task.wait(1) until latestRoom.Value >= 5
-    end
-    
+local function spawnTrauma()
     local Trauma = spawner.createEntity({
         CustomName = "Trauma",
         Model = "rbxassetid://6685956411", 
-        Speed = 0, 
-        DelayTime = 120,
+        Speed = 0, DelayTime = 500,
         CanKill = true, KillRange = 5, 
         CamShake = {true, {6, 30, 1, 1}, 50}, 
         SpawnLocation = "Next", 
@@ -63,13 +52,28 @@ task.spawn(function()
     
     Trauma:SetCallback("OnSpawned", function()
         pcall(function()
-            local primaryPart = Trauma.EntityModel:WaitForChild("PrimaryPart", 10)
-            if primaryPart then
-                local light = Instance.new("PointLight", primaryPart)
-                light.Color, light.Brightness, light.Range = Color3.fromRGB(255, 0, 0), 25, 60
-            end
+            local pPart = Trauma.EntityModel:WaitForChild("PrimaryPart", 10)
+            local light = Instance.new("PointLight", pPart)
+            light.Color, light.Brightness, light.Range = Color3.fromRGB(255, 0, 0), 25, 60
         end)
     end)
-    
     spawner.runEntity(Trauma)
+end
+
+local LatestRoom = game:GetService("ReplicatedStorage").GameData.LatestRoom
+local lastRoomDepth = 0
+local lastRoomTrauma = 0
+
+LatestRoom.Changed:Connect(function(room)
+    if room <= 0 or room == 50 or room == 100 then return end
+
+    if room % 4 == 0 and room ~= lastRoomDepth then
+        lastRoomDepth = room
+        task.delay(2, spawnDepth)
+    end
+
+    if room % 7 == 0 and room ~= lastRoomTrauma then
+        lastRoomTrauma = room
+        task.delay(1, spawnTrauma)
+    end
 end)
