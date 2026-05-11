@@ -4,16 +4,32 @@
     fixed by Qwerty
 --]]
 
+-- ФИКС ОШИБКИ INFINITE YIELD (Создаем папку Remotes, которую ищут старые скрипты)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+if not ReplicatedStorage:FindFirstChild("Remotes") then
+    local remotes = Instance.new("Folder")
+    remotes.Name = "Remotes"
+    remotes.Parent = ReplicatedStorage
+    -- Создаем подпапку Folder внутри Remotes, если скрипт ищет именно её
+    local subFolder = Instance.new("Folder")
+    subFolder.Name = "Folder"
+    subFolder.Parent = remotes
+end
+
 local NightmareRush = { Title = "Rush But Even Harder", Desc = "Don't Be fooled", Image = "rbxassetid://10483790459", id = 1 }
 local NightmareAmbush = { Title = "Ambush But Even Harder", Desc = "Don't Be fooled", Image = "rbxassetid://10937455925", id = 2 }
 
-pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/Sprint"))() end)
+-- Спринт (с pcall, чтобы ошибка внутри него не ломала весь мод)
+pcall(function() 
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/MuhXd/DoorSuff/main/OtherSuff/Sprint"))() 
+end)
 
 local spawner = loadstring(game:HttpGet("https://raw.githubusercontent.com/RegularVynixu/Utilities/main/Doors/Entity%20Spawner/V2/Source.lua"))()
 local Achievements = loadstring(game:HttpGet("https://raw.githubusercontent.com/MuhXd/Models/main/RegularVynixu's%20Achievement%20Modifyer"))()
 
-game:GetService("TextChatService").TextChannels.RBXGeneral:DisplaySystemMessage("<font color='#FF0000'><b>Doors Hard Mode ON! By MuhammadGames (MuhammadGames#0017) and Volta (volta#2161)</b></font>")
+game:GetService("TextChatService").TextChannels.RBXGeneral:DisplaySystemMessage("<font color='#FF0000'><b>Doors Hard Mode ON! By MuhammadGames and Volta</b></font>")
 
+-- ОБРАБОТЧИК АЧИВОК
 spawner.Events.OnEntityDespawned:Connect(function(entityModel, name)
     local char = game.Players.LocalPlayer.Character
     if char and char:FindFirstChild("Humanoid") and char.Humanoid.Health > 0 then
@@ -25,6 +41,7 @@ spawner.Events.OnEntityDespawned:Connect(function(entityModel, name)
     end
 end)
 
+-- ФУНКЦИЯ СПАВНА DEPTH
 local function spawnDepth()
     local depth = spawner.createEntity({
         CustomName = "Depth",
@@ -39,6 +56,7 @@ local function spawnDepth()
     spawner.runEntity(depth)
 end
 
+-- ФУНКЦИЯ СПАВНА TRAUMA
 local function spawnTrauma()
     local Trauma = spawner.createEntity({
         CustomName = "Trauma",
@@ -53,13 +71,16 @@ local function spawnTrauma()
     Trauma:SetCallback("OnSpawned", function()
         pcall(function()
             local pPart = Trauma.EntityModel:WaitForChild("PrimaryPart", 10)
-            local light = Instance.new("PointLight", pPart)
-            light.Color, light.Brightness, light.Range = Color3.fromRGB(255, 0, 0), 25, 60
+            if pPart then
+                local light = Instance.new("PointLight", pPart)
+                light.Color, light.Brightness, light.Range = Color3.fromRGB(255, 0, 0), 25, 60
+            end
         end)
     end)
     spawner.runEntity(Trauma)
 end
 
+-- КОНТРОЛЛЕР КОМНАТ
 local LatestRoom = game:GetService("ReplicatedStorage").GameData.LatestRoom
 local lastRoomDepth = 0
 local lastRoomTrauma = 0
@@ -67,11 +88,13 @@ local lastRoomTrauma = 0
 LatestRoom.Changed:Connect(function(room)
     if room <= 0 or room == 50 or room == 100 then return end
 
+    -- Depth каждые 4 комнаты
     if room % 4 == 0 and room ~= lastRoomDepth then
         lastRoomDepth = room
         task.delay(2, spawnDepth)
     end
 
+    -- Trauma каждые 7 комнат
     if room % 7 == 0 and room ~= lastRoomTrauma then
         lastRoomTrauma = room
         task.delay(1, spawnTrauma)
